@@ -21,7 +21,7 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        timeMaster()
+        updateUI()
     }
 
     func isLeapYear(year: Int) -> Bool {
@@ -32,14 +32,19 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         }
     }
     
-    func timeMaster() {
+    func updateUI() {
+        
+        // 判斷星期幾
         let dateComponent = Calendar.current.dateComponents(in: TimeZone.current, from: datePicker.date)
         weekSegment.selectedSegmentIndex = dateComponent.weekday! - 1
+        
+        // 判斷閏年
         if let year = dateComponent.year {
             yearLabel.text = "\(year)"
             yearSwitch.isOn = isLeapYear(year: year)
         }
         
+        // 判斷星座
         for (i, constellation) in constellations.enumerated() {
             if constellation.checkInterval(dateComponent: dateComponent) {
                 constellationPicker.selectRow(i, inComponent: 0, animated: true)
@@ -49,7 +54,8 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     }
     
     @IBAction func datePickerChanged(_ sender: UIDatePicker) {
-        timeMaster()
+        // 根據日期調整顯示的星期、閏年和星座
+        updateUI()
     }
     
     
